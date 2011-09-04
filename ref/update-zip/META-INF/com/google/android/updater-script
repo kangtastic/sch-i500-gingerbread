@@ -1,0 +1,14 @@
+ui_print("");
+ui_print("SCH-I500 KERNEL/RECOVERY (DEV Build)");
+ui_print("------------------------------------");
+ui_print("");
+show_progress(1.0, 10);
+ui_print("    > Installing SCH-I500 KERNEL/RECOVERY");
+package_extract_dir("kernel_update", "/tmp/kernel_update");
+set_progress(0.5);
+set_perm(0, 0, 0755, "/tmp/kernel_update/bmlwrite");
+run_program("/tmp/kernel_update/bmlwrite", "/tmp/kernel_update/zImage", "/dev/block/bml7");
+run_program("/tmp/kernel_update/bmlwrite", "/tmp/kernel_update/zImage", "/dev/block/bml8");
+set_progress(1.0);
+
+
