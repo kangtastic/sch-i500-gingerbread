@@ -28,4 +28,18 @@ if [[ $? -ne 0 ]]; then
 	exit -1
 fi
 
+# Copy generated kernel modules into intermediate folder
+cp $SRCDIR/kernel/crypto/ansi_cprng.ko $MODULEBINDIR
+cp $SRCDIR/kernel/drivers/misc/param/param.ko $MODULEBINDIR
+cp $SRCDIR/kernel/drivers/misc/vibetonz/vibrator.ko $MODULEBINDIR
+cp $SRCDIR/kernel/drivers/scsi/scsi_wait_scan.ko $MODULEBINDIR
+cp $SRCDIR/kernel/net/sched/cls_flow.ko $MODULEBINDIR
+
+# Strip symbols from generated binaries
+$STRIP --strip-debug $MODULEBINDIR/ansi_cprng.ko
+$STRIP --strip-debug $MODULEBINDIR/param.ko
+$STRIP --strip-debug $MODULEBINDIR/vibrator.ko
+$STRIP --strip-debug $MODULEBINDIR/scsi_wait_scan.ko
+$STRIP --strip-debug $MODULEBINDIR/cls_flow.ko
+
 exit
