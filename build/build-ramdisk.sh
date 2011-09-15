@@ -29,6 +29,8 @@ cp -R $RAMDISKREFDIR/* $RAMDISKBINDIR/
 cp $MODULEBINDIR/ansi_cprng.ko $RAMDISKBINDIR/lib/modules/
 cp $MODULEBINDIR/cls_flow.ko $RAMDISKBINDIR/lib/modules/
 cp $MODULEBINDIR/param.ko $RAMDISKBINDIR/lib/modules/
+cp $MODULEBINDIR/dpram_atlas.ko $RAMDISKBINDIR/lib/modules/
+cp $MODULEBINDIR/dpram_recovery.ko $RAMDISKBINDIR/lib/modules/
 cp $MODULEBINDIR/scsi_wait_scan.ko $RAMDISKBINDIR/lib/modules/
 cp $MODULEBINDIR/vibrator.ko $RAMDISKBINDIR/lib/modules/
 
