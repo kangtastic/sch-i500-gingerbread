@@ -149,12 +149,14 @@ on fs
 # SEC_DMCRYPT crypt flag added data
     # mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
     mount rfs /dev/block/mmcblk0p1 /data nosuid nodev crypt check=no
+    mnount ext4 /dev/block/mmcblk0p1 /data nosuid nodev noatime nodiratime
     chown system system /data
     chmod 0771 /data    
 
     mkdir /dbdata
   #SEC_DMCRYPT crypt flag added
     mount rfs /dev/block/stl10 /dbdata nosuid nodev crypt check=no
+    mount ext4 /dev/block/stl10 /dbdata nosuid nodev noatime nodiratime
     #mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
     chown system system /dbdata
     chmod 0771 /dbdata
@@ -169,6 +171,7 @@ on fs
     chown system system /dbdata/db-journal
     chmod 0777 /dbdata/db-journal
     mount rfs /dev/block/stl11 /cache nosuid nodev check=no
+    mount ext4 /dev/block/stl11 /cache nosuid nodev noatime nodiratime
 
     mkdir /mnt/.lfs 0755 root root
     mount j4fs /dev/block/stl6 /mnt/.lfs
@@ -198,6 +201,7 @@ on fs
 # create SEC_INTERNAL_STORAGE 2/3   
 ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
     mount rfs /dev/block/mmcblk0p2 /data/fota nosuid nodev check=no
+    mount ext4 /dev/block/mmcblk0p2 /data/fota nosuid nodev noatime nodiratime
     chown system system /data/fota
     chmod 0771 /data/fota
    
@@ -213,6 +217,7 @@ mkdir /preinstall 0771 system system
     # create SEC_INTERNAL_STORAGE 3/3
     ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
     mount rfs /dev/block/mmcblk0p3 /preinstall nosuid nodev check=no
+    mount ext4 /dev/block/mmcblk0p3 /preinstall nosuid nodev noatime nodiratime
     chown system system /preinstall
     chmod 0771 /preinstall
 
@@ -859,8 +864,9 @@ service pbap /system/bin/sdptool add --channel=19 PBAP
 service installd /system/bin/installd
     socket installd stream 600 system system
 
-service flash_recovery /system/etc/install-recovery.sh
-    oneshot
+# djp952: removed
+# service flash_recovery /system/etc/install-recovery.sh
+#    oneshot
 
 service racoon /system/bin/racoon
     socket racoon stream 600 system system
