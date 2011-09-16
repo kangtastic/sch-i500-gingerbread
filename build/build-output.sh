@@ -13,8 +13,7 @@ if [ ! -d "$OUTDIR" ]; then
 	mkdir $OUTDIR
 fi
 
-
-#TODO: Do the work in BIN, not REF
+#TODO: clean up and move work into out or bin; don't work in REF
 
 # Edify Update ZIP
 cp $KERNELBINDIR/zImage $REFDIR/update-zip/kernel_update/

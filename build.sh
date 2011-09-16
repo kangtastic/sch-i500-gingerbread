@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# OPTIONAL SCRIPT ARGUMENTS (kinda just hacked in):
-#
-# fast		- Perform a fast build.  This will skip BUILD-CONFIG and BUILD-MODULES.  Useful only for
-#                 incremental builds that do not require updated .KO files to be placed into the zImage
-#
-# clean-platform	- Clean platform-based projects before building them.  Not compatible with FAST
-#			 because I'm too lazy to do something better in here right now
-
 # TOOLCHAIN / TOOLCHAIN_PREFIX
 #
 # External ARM Toolchain
@@ -28,12 +20,10 @@ export ANDROIDROOTDIR=~/android/platform/android-2.3.4_r1
 #
 # bin   - Intermediate outputs
 # build - Build scripts
-# doc   - Documentation
 # out   - Final outputs
 # src   - Source code
 export BINDIR=$ROOTDIR/bin
 export BUILDDIR=$ROOTDIR/build
-export DOCDIR=$ROOTDIR/doc
 export OUTDIR=$ROOTDIR/out
 export REFDIR=$ROOTDIR/ref
 export SRCDIR=$ROOTDIR/src
@@ -57,32 +47,14 @@ if [ ! -d "$ANDROIDROOTDIR" ]; then
 	echo ">> ERROR: Android platform root directory ["$ANDROIDROOTDIR"] does not exist" 1>&2
 	exit -1
 fi
-# TODO: Check if built!
+# TODO: Check if built (how?)
 
 # BUILD-CLEAN
-bash $BUILDDIR/build-clean.sh $1
-if [[ $? -ne 0 ]]; then
-	echo
-	echo ">> ERROR in phase BUILD-CLEAN. Terminating build."
-	exit
-fi
-
-# BUILD-CONFIG
-if [ ! "$1" = "fast" ]; then 
-	bash $BUILDDIR/build-config.sh
+if [ "$1" = "clean" ]; then 
+	bash $BUILDDIR/build-clean.sh $1
 	if [[ $? -ne 0 ]]; then
 		echo
-		echo ">> ERROR in phase BUILD-CONFIG. Terminating build."
-		exit
-	fi
-fi
-
-# BUILD-MODULES
-if [ ! "$1" = "fast" ]; then 
-	bash $BUILDDIR/build-modules.sh
-	if [[ $? -ne 0 ]]; then
-		echo
-		echo ">> ERROR in phase BUILD-MODULES. Terminating build."
+		echo ">> ERROR in phase BUILD-CLEAN. Terminating build."
 		exit
 	fi
 fi
