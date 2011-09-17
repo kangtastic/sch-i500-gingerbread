@@ -741,6 +741,8 @@ service vold /system/bin/vold
     socket vold stream 0660 root mount
     ioprio be 2
     socket enc_report stream 0660 root mount
+    
+write /sys/block/mmcblk0/bdi/read_ahead_kb 4096
 
 service notified_event /system/bin/notified_event
     user system
