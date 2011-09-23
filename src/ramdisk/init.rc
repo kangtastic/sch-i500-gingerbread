@@ -107,8 +107,8 @@ loglevel 3
     insmod /lib/modules/dpram_atlas.ko
     insmod /lib/modules/j4fs.ko
 
-    #insmod /lib/modules/Si4709_driver.ko
-    #insmod /lib/modules/hotspot_event_monitoring.ko
+    insmod /lib/modules/Si4709_driver.ko
+    insmod /lib/modules/hotspot_event_monitoring.ko
 
     # ko files for vibrator
     insmod /lib/modules/vibrator.ko
@@ -129,7 +129,6 @@ on fs
     # mount yaffs2 mtd@cache /cache nosuid nodev
     mount rfs /dev/block/stl9 /system check=no
     mount rfs /dev/block/stl9 /system ro remount
-    mount ext4 /dev/block/stl9 /system ro noatime nodiratime
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
     #chown system system /efs
@@ -149,14 +148,12 @@ on fs
 # SEC_DMCRYPT crypt flag added data
     # mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
     mount rfs /dev/block/mmcblk0p1 /data nosuid nodev crypt check=no
-    mount ext4 /dev/block/mmcblk0p1 /data nosuid nodev noatime nodiratime
     chown system system /data
     chmod 0771 /data    
 
     mkdir /dbdata
   #SEC_DMCRYPT crypt flag added
     mount rfs /dev/block/stl10 /dbdata nosuid nodev crypt check=no
-    mount ext4 /dev/block/stl10 /dbdata nosuid nodev noatime nodiratime
     #mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
     chown system system /dbdata
     chmod 0771 /dbdata
@@ -171,7 +168,6 @@ on fs
     chown system system /dbdata/db-journal
     chmod 0777 /dbdata/db-journal
     mount rfs /dev/block/stl11 /cache nosuid nodev check=no
-    mount ext4 /dev/block/stl11 /cache nosuid nodev noatime nodiratime
 
     mkdir /mnt/.lfs 0755 root root
     mount j4fs /dev/block/stl6 /mnt/.lfs
@@ -201,7 +197,6 @@ on fs
 # create SEC_INTERNAL_STORAGE 2/3   
 ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
     mount rfs /dev/block/mmcblk0p2 /data/fota nosuid nodev check=no
-    mount ext4 /dev/block/mmcblk0p2 /data/fota nosuid nodev noatime nodiratime
     chown system system /data/fota
     chmod 0771 /data/fota
    
@@ -217,7 +212,6 @@ mkdir /preinstall 0771 system system
     # create SEC_INTERNAL_STORAGE 3/3
     ##    mount ext3 /dev/block/mmcblk0p1 /userdata nosuid nodev
     mount rfs /dev/block/mmcblk0p3 /preinstall nosuid nodev check=no
-    mount ext4 /dev/block/mmcblk0p3 /preinstall nosuid nodev noatime nodiratime
     chown system system /preinstall
     chmod 0771 /preinstall
 
@@ -528,30 +522,32 @@ on boot
 
 # Define the oom_adj values for the classes of processes that can be
 # killed by the kernel.  These are used in ActivityManagerService.
-    setprop ro.FOREGROUND_APP_ADJ 0
-    setprop ro.VISIBLE_APP_ADJ 1
-    setprop ro.PERCEPTIBLE_APP_ADJ 2
-    setprop ro.HEAVY_WEIGHT_APP_ADJ 3
-    setprop ro.SECONDARY_SERVER_ADJ 4
-    setprop ro.BACKUP_APP_ADJ 5
-    setprop ro.HOME_APP_ADJ 6
-    setprop ro.HIDDEN_APP_MIN_ADJ 7
-    setprop ro.EMPTY_APP_ADJ 15
+        setprop ro.FOREGROUND_APP_ADJ 0
+        setprop ro.VISIBLE_APP_ADJ 1
+        setprop ro.PERCEPTIBLE_APP_ADJ 1
+        setprop ro.HEAVY_WEIGHT_APP_ADJ 2
+        setprop ro.SECONDARY_SERVER_ADJ 2
+        setprop ro.BACKUP_APP_ADJ 2
+        setprop ro.HOME_APP_ADJ 4
+        setprop ro.HIDDEN_APP_MIN_ADJ 7
+        setprop ro.CONTENT_PROVIDER_ADJ 14
+        setprop ro.EMPTY_APP_ADJ 15
 
 # to enable wifi
      setprop wifi.interface "eth0"
 
 # Define the memory thresholds at which the above process classes will
 # be killed.  These numbers are in pages (4k).
-    setprop ro.FOREGROUND_APP_MEM 2048
-    setprop ro.VISIBLE_APP_MEM 3072
-    setprop ro.PERCEPTIBLE_APP_MEM 4096
-    setprop ro.HEAVY_WEIGHT_APP_MEM 4096
-    setprop ro.SECONDARY_SERVER_MEM 6144
-    setprop ro.BACKUP_APP_MEM 6144
-    setprop ro.HOME_APP_MEM 6144
-    setprop ro.HIDDEN_APP_MEM 7168
-    setprop ro.EMPTY_APP_MEM 8192
+        setprop ro.FOREGROUND_APP_MEM 1024
+        setprop ro.VISIBLE_APP_MEM 2048
+        setprop ro.PERCEPTIBLE_APP_MEM 4096
+        setprop ro.HEAVY_WEIGHT_APP_MEM 4096
+        setprop ro.SECONDARY_SERVER_MEM 6144
+        setprop ro.BACKUP_APP_MEM 6144
+        setprop ro.HOME_APP_MEM 6144
+        setprop ro.HIDDEN_APP_MEM 10240
+        setprop ro.CONTENT_PROVIDER_MEM 10240
+        setprop ro.EMPTY_APP_MEM 12288
     
     
     setprop ro.bt.bdaddr_path "/data/misc/bluetooth/bt_addr"
@@ -560,18 +556,20 @@ on boot
 # Note that the driver only supports 6 slots, so we have combined some of
 # the classes into the same memory level; the associated processes of higher
 # classes will still be killed first.
-    write /sys/module/lowmemorykiller/parameters/adj 0,1,2,4,7,15
+    write /sys/module/lowmemorykiller/parameters/adj 0,1,2,7,14,15
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 2048,3072,4096,6144,7168,8192
+    write /sys/module/lowmemorykiller/parameters/minfree 2048,3072,4096,6144,10240,12288
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
 
     # Tweak background writeout
     write /proc/sys/vm/dirty_expire_centisecs 200
-    write /proc/sys/vm/dirty_background_ratio  5
+    write /proc/sys/vm/dirty_background_ratio  35
+    write /proc/sys/vm/dirty_ratio  65
+    write /proc/sys/vm/vfs_cache_pressure  40
 
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
@@ -741,8 +739,6 @@ service vold /system/bin/vold
     socket vold stream 0660 root mount
     ioprio be 2
     socket enc_report stream 0660 root mount
-    
-write /sys/block/mmcblk0/bdi/read_ahead_kb 4096
 
 service notified_event /system/bin/notified_event
     user system
@@ -866,9 +862,8 @@ service pbap /system/bin/sdptool add --channel=19 PBAP
 service installd /system/bin/installd
     socket installd stream 600 system system
 
-# djp952: removed
-# service flash_recovery /system/etc/install-recovery.sh
-#    oneshot
+service flash_recovery /system/etc/install-recovery.sh
+    oneshot
 
 service racoon /system/bin/racoon
     socket racoon stream 600 system system
@@ -911,3 +906,8 @@ service geomagneticd /system/bin/geomagneticd
 service gps-daemon /system/vendor/bin/gpsd
 	user system
 	group system inet
+
+# enable init.d support
+service run_parts /system/xbin/run-parts /system/etc/init.d
+        oneshot
+

@@ -41,7 +41,6 @@ on fs
     mount tmpfs tmpfs /tmp
     mount rfs /dev/block/stl9 /system check=no
     #mount rfs /dev/block/stl9 /system ro remount
-    mount ext4 /dev/block/stl9 /system ro noatime nodiratime
 
     exec apply_disk_policy
 
