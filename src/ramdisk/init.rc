@@ -107,8 +107,8 @@ loglevel 3
     insmod /lib/modules/dpram_atlas.ko
     insmod /lib/modules/j4fs.ko
 
-    #insmod /lib/modules/Si4709_driver.ko
-    #insmod /lib/modules/hotspot_event_monitoring.ko
+    insmod /lib/modules/Si4709_driver.ko
+    insmod /lib/modules/hotspot_event_monitoring.ko
 
     # ko files for vibrator
     insmod /lib/modules/vibrator.ko
