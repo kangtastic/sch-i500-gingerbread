@@ -42,11 +42,6 @@ if [ ! -d "$SRCDIR" ]; then
 	exit -1
 fi
 
-# Verify Android Platform directory exists and that it has been built
-if [ ! -d "$ANDROIDROOTDIR" ]; then
-	echo ">> ERROR: Android platform root directory ["$ANDROIDROOTDIR"] does not exist" 1>&2
-	exit -1
-fi
 # TODO: Check if built (how?)
 
 # BUILD-CLEAN
