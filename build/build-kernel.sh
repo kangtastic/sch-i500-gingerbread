@@ -26,7 +26,7 @@ fi
 
 # MAKE KERNEL (PASS 1 - CONFIG)
 pushd $SRCDIR/kernel > /dev/null
-make CROSS_COMPILE=$TOOLCHAIN/$TOOLCHAIN_PREFIX ARCH=arm sch-i500_defconfig
+make CROSS_COMPILE=$TOOLCHAIN/$TOOLCHAIN_PREFIX ARCH=arm ccampos784_defconfig
 popd > /dev/null
 
 if [[ $? -ne 0 ]]; then
