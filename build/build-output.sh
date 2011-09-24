@@ -27,7 +27,7 @@ popd > /dev/null
 cp $KERNELBINDIR/zImage $OUTDIR/
 cp $OUTDIR/zImage $OUTDIR/recovery.bin
 pushd $OUTDIR > /dev/null
-tar --format=ustar -cf sch-i500-kernel.tar recovery.bin zImage
+tar --format=ustar -cf sch-i500-kernel.tar zImage
 md5sum -t sch-i500-kernel.tar >> sch-i500-kernel.tar
 mv sch-i500-kernel.tar sch-i500-kernel.tar.md5
 
