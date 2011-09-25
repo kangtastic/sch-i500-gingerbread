@@ -560,18 +560,18 @@ on boot
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 2560,4096,5632,10240,11776,14848
+    write /sys/module/lowmemorykiller/parameters/minfree 2560,4096,6144,12288,14336,20480
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
 
     # Tweak background writeout
-    write /proc/sys/vm/swappiness 20
-    write /proc/sys/vm/dirty_expire_centisecs 3000
-    write /proc/sys/vm/dirty_writeback_centisecs 500
-    write /proc/sys/vm/dirty_background_ratio  3
-    write /proc/sys/vm/dirty_ratio  15
-    write /proc/sys/vm/vfs_cache_pressure  70
+    write /proc/sys/vm/swappiness 50
+    write /proc/sys/vm/dirty_expire_centisecs 500
+    write /proc/sys/vm/dirty_writeback_centisecs 1500
+    write /proc/sys/vm/dirty_background_ratio 5
+    write /proc/sys/vm/dirty_ratio 85
+    write /proc/sys/vm/vfs_cache_pressure 30
     
     # tweak sdcard readahead cache
     write /sys/block/mmcblk0/bdi/read_ahead_kb 4096
