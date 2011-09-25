@@ -54,7 +54,9 @@ popd > /dev/null
 
 # MAKE KERNEL (PASS 3 - BUILD)
 pushd $SRCDIR/kernel > /dev/null
-make CROSS_COMPILE=$TOOLCHAIN/$TOOLCHAIN_PREFIX ARCH=arm
+make -j `expr $(grep processor /proc/cpuinfo | wc -l) + 1` \
+	CROSS_COMPILE=$TOOLCHAIN/$TOOLCHAIN_PREFIX \
+	ARCH=arm
 popd > /dev/null
 
 if [[ $? -ne 0 ]]; then
