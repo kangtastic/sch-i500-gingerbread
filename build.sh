@@ -3,7 +3,7 @@
 # TOOLCHAIN / TOOLCHAIN_PREFIX
 #
 # External ARM Toolchain
-export TOOLCHAIN=/opt/toolchains/arm-2010.09/bin
+export TOOLCHAIN=/home/vb/toolchain/arm-2009q3/bin
 export TOOLCHAIN_PREFIX=arm-none-linux-gnueabi-
 
 # ROOTDIR
