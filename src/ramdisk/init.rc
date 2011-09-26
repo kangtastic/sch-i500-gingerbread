@@ -107,8 +107,8 @@ loglevel 3
     insmod /lib/modules/dpram_atlas.ko
     insmod /lib/modules/j4fs.ko
 
-    #insmod /lib/modules/Si4709_driver.ko
-    #insmod /lib/modules/hotspot_event_monitoring.ko
+#    insmod /lib/modules/Si4709_driver.ko
+#    insmod /lib/modules/hotspot_event_monitoring.ko
 
     # ko files for vibrator
     insmod /lib/modules/vibrator.ko
@@ -129,6 +129,7 @@ on fs
     # mount yaffs2 mtd@cache /cache nosuid nodev
     mount rfs /dev/block/stl9 /system check=no
     mount rfs /dev/block/stl9 /system ro remount
+    mount ext4 /dev/block/stl9 /system wait noatime nosuid nodev
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
     #chown system system /efs
@@ -148,6 +149,7 @@ on fs
 # SEC_DMCRYPT crypt flag added data
     # mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
     mount rfs /dev/block/mmcblk0p1 /data nosuid nodev crypt check=no
+    mount ext4 /dev/block/mmcblk0p1 /data wait noatime nosuid nodev
     chown system system /data
     chmod 0771 /data    
 
@@ -155,6 +157,7 @@ on fs
   #SEC_DMCRYPT crypt flag added
     mount rfs /dev/block/stl10 /dbdata nosuid nodev crypt check=no
     #mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
+    mount ext4 /dev/block/stl10 /dbdata wait noatime nosuid nodev
     chown system system /dbdata
     chmod 0771 /dbdata
     chmod 0771 /dbdata
@@ -168,6 +171,7 @@ on fs
     chown system system /dbdata/db-journal
     chmod 0777 /dbdata/db-journal
     mount rfs /dev/block/stl11 /cache nosuid nodev check=no
+    mount ext4 /dev/block/stl11 /cache wait noatime nosuid nodev
 
     mkdir /mnt/.lfs 0755 root root
     mount j4fs /dev/block/stl6 /mnt/.lfs
@@ -556,25 +560,23 @@ on boot
 # Note that the driver only supports 6 slots, so we have combined some of
 # the classes into the same memory level; the associated processes of higher
 # classes will still be killed first.
-    write /sys/module/lowmemorykiller/parameters/adj 0,1,2,4,6,15
+    write /sys/module/lowmemorykiller/parameters/adj 0,1,2,7,14,15
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 2560,4096,6144,12288,14336,20480
+    write /sys/module/lowmemorykiller/parameters/minfree 2048,3072,4096,6144,10240,12288
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
 
     # Tweak background writeout
-    write /proc/sys/vm/swappiness 50
-    write /proc/sys/vm/dirty_expire_centisecs 500
-    write /proc/sys/vm/dirty_writeback_centisecs 1500
-    write /proc/sys/vm/dirty_background_ratio 5
-    write /proc/sys/vm/dirty_ratio 85
-    write /proc/sys/vm/vfs_cache_pressure 30
-    
+    write /proc/sys/vm/dirty_expire_centisecs 200
+    write /proc/sys/vm/dirty_background_ratio  35
+    write /proc/sys/vm/dirty_ratio  65
+    write /proc/sys/vm/vfs_cache_pressure  40
+
     # tweak sdcard readahead cache
-    write /sys/block/mmcblk0/bdi/read_ahead_kb 4096
+    write /sys/block/mmcblk1/bdi/read_ahead_kb 1024
 
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
