@@ -1,0 +1,16 @@
+TKSGB KERNEL SOURCE REPOSITORY
+
+Linux 2.6.35.7 kernel for SCH-I500 devices running Gingerbread and TouchWiz, based on Samsung's EH09 source drop for Mesmerize.
+
+
+BUILDING
+
+Obtain and install/unpack an appropriate toolchain such as Sourcery Lite arm2009q3 (recommended by Samsung). Note that toolchains targetting only the ARM EABI cannot cross-compile useful things like busybox, but both should work for the kernel.
+
+Make the necessary edits in the source tree to point to the location of the toolchain:
+build.sh - TOOLCHAIN, TOOLCHAIN_PREFIX
+src/kernel/Makefile - CROSS_COMPILE
+
+If desired, edit the build scripts and ramdisk to suit your needs, such as removing references to TKSGB. The scripts and ramdisk structures are pretty easy to figure out.
+
+Run ./build.sh or alternatively ./build_log.sh to log screen output while building. Output will be in out/ and will include Odin- and CWM-flashable packages.
