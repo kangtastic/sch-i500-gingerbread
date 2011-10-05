@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# DATE / TIME EXPORTS
+export DATE=$(date +%m%d)
+export TIME=$(date +%H%M)
+
 # TOOLCHAIN / TOOLCHAIN_PREFIX
 #
 # External ARM Toolchain

@@ -31,5 +31,7 @@ rm -f $RAMDISKBINDIR/lib/modules/hotspot_event_monitoring.ko
 # Copy modified versions of the ramdisk files into the output directory
 cp -R $RAMDISKSRCDIR/* $RAMDISKBINDIR/
 
+# Create kernel version tag in ramdisk root
+echo "TKSGB-EH09-$DATE.$TIME" > $RAMDISKBINDIR/kernel_version
 exit
 

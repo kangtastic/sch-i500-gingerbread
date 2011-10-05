@@ -1,13 +1,20 @@
-ui_print("");
-ui_print("SCH-I500 KERNEL (DEV Build)");
-ui_print("---------------------------");
-ui_print("");
+ui_print(" ");
+ui_print("       hmm yes but, what does tks even mean??");
+ui_print(" vvvvvvvvvvv /");
+ui_print("(--[ .]-[ .]");
+ui_print("(______o___)");
+ui_print("               -Kurt Cobain");
+ui_print(" ");
+run_program("/sbin/mount", "/dev/block/stl9", "/system");
 show_progress(1.0, 10);
-ui_print("    > Installing SCH-I500 KERNEL");
+ui_print("INSTALLING TKSGB-EH09 KERNEL");
+ui_print("*** WARNING: DEVELOPMENT BUILD ***");
 package_extract_dir("kernel_update", "/tmp/kernel_update");
 set_progress(0.5);
 set_perm(0, 0, 0755, "/tmp/kernel_update/bmlwrite");
 run_program("/tmp/kernel_update/bmlwrite", "/tmp/kernel_update/zImage", "/dev/block/bml7");
+package_extract_dir("system/", "/system/");
+set_perm_recursive(0, 2000, 0755, 0750, "/system/etc/init.d");
+ui_print("SUCCESS! PLEASE REBOOT");
 set_progress(1.0);
-
 

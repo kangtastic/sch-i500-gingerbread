@@ -575,9 +575,6 @@ on boot
     write /proc/sys/vm/dirty_ratio  65
     write /proc/sys/vm/vfs_cache_pressure  40
 
-    # tweak sdcard readahead cache
-    write /sys/block/mmcblk1/bdi/read_ahead_kb 1024
-
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
     chown radio system /sys/android_power/request_state
