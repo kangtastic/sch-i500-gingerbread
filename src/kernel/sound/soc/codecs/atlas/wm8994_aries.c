@@ -39,6 +39,9 @@ extern void FSA9480_Enable_SPK(u8 enable);
 /*
  * Definitions of tunning volumes for wm8994
  */
+
+static const int incallBoost = 0x0C00;
+
 struct gain_info_t playback_gain_table[PLAYBACK_GAIN_NUM] = {
 	{ /* COMMON */
 		.mode = COMMON_SET_BIT,
@@ -333,7 +336,8 @@ struct gain_info_t voicecall_gain_table[VOICECALL_GAIN_NUM] = {
 		.mode = VOICECALL_SPK,
 		.reg  = WM8994_LEFT_LINE_INPUT_1_2_VOLUME,	/* 18h */
 		.mask = WM8994_IN1L_VOL_MASK,
-		.gain = WM8994_IN1L_VU | 0x12   /* Mic +30dB */
+		// .gain = WM8994_IN1L_VU | 0x12   /* Mic +30dB */
+		.gain = WM8994_IN1L_VU | 0x1F   /* Mic +30dB */
 	}, {
 		.mode = VOICECALL_SPK,
 		.reg  = WM8994_SPKMIXL_ATTENUATION,	/* 22h */
@@ -1663,7 +1667,8 @@ void wm8994_set_voicecall_common_setting(struct snd_soc_codec *codec)
 		WM8994_AIF2ADCR_SRC | WM8994_AIF2_BCLK_INV | 0x18);
 
 	wm8994_write(codec, WM8994_AIF2_BCLK, 0x70);
-	wm8994_write(codec, WM8994_AIF2_CONTROL_2, 0x0000);
+	// wm8994_write(codec, WM8994_AIF2_CONTROL_2, 0x0000);
+	wm8994_write(codec, WM8994_AIF2_CONTROL_2, incallBoost); // incall boost
 	wm8994_write(codec, WM8994_AIF2_MASTER_SLAVE, WM8994_AIF2_MSTR |
 		WM8994_AIF2_CLK_FRC | WM8994_AIF2_LRCLK_FRC);
 
@@ -1731,7 +1736,8 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	wm8994_write(codec, 0x0302, 0x4000);	// AIF1 Master Slave Setting. To prevent that the music is played slowly.
 	wm8994_write(codec, 0x0312, 0x0000);	// AIF2 Master Slave Setting
 	wm8994_write(codec, 0x0310, 0x4118);	// AIF2 Control 1
-	wm8994_write(codec, 0x0311, 0x0000);	// AIF2 Control 2
+	// wm8994_write(codec, 0x0311, 0x0000);	// AIF2 Control 2
+	wm8994_write(codec, 0x0311, incallBoost);	// AIF2 Control 2, incall boost
 	wm8994_write(codec, 0x0520, 0x0080);	// AIF2 DAC Filter 1
 	wm8994_write(codec, 0x0204, 0x0019);	// AIF2 Clocking 1. AIF2 Clock Enable
 
@@ -1757,14 +1763,21 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	/* Input Path Volume */
 	if(loopback_mode == LOOPBACK_MODE_OFF)
 	{
+	/*
              #ifdef CONFIG_MACH_ATLAS_USCC
 		wm8994_write(codec, 0x0018, 0x0110); //- 9dB for metrico test	// Left Line Input 1&2 Volume
 		#else
 		wm8994_write(codec, 0x0018, 0x0116);	// Left Line Input 1&2 Volume
 		#endif
+	*/
+
+		wm8994_write(codec, 0x0018, 0x0116);	// Left Line Input 1&2 Volume, incall boost
+		// not 0x0113 but 0x0116 because = WM8994_IN1L_VU | WM8994_IN1L_VOL_16_5dB
+
 		wm8994_write(codec, 0x0500, 0x01C0);	// AIF2 ADC Left Volume
 		wm8994_write(codec, 0x0612, 0x01C0);	// DAC2 Left Volume
-		wm8994_write(codec, 0x0603, 0x000C);	// DAC2 Mixer Volumes
+		// wm8994_write(codec, 0x0603, 0x000C);	// DAC2 Mixer Volumes
+		wm8994_write(codec, 0x0603, 0x01EF);	// DAC2 Mixer Volumes, incall boost
 		wm8994_write(codec, 0x0621, 0x01C0);	// Sidetone
 	}
 	else
@@ -1782,10 +1795,23 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	{
 		wm8994_write(codec, 0x0031, 0x0000);	// Output Mixer 5
 		wm8994_write(codec, 0x0032, 0x0000);	// Output Mixer 6
-		wm8994_write(codec, 0x0020, 0x017D);	// Left OPGA Volume
-		wm8994_write(codec, 0x0021, 0x017D);	// Right OPGA Volume
-		wm8994_write(codec, 0x0610, 0x01C0);	// DAC1 Left Volume
-		wm8994_write(codec, 0x0611, 0x01C0);	// DAC1 Right Volume
+
+		// wm8994_write(codec, 0x0020, 0x017D);	// Left OPGA Volume
+		val = wm8994_read(codec, 0x0020);	// 0x0020 is WM8994_LEFT_OPGA_VOLUME
+		val &= ~(0x0040 | 0x003F);		// WM8994_MIXOUTL_MUTE_N_MASK | WM8994_MIXOUTL_VOL_MASK 
+		val |= (0x0100 | 0x0040 | 0x3F);	// these work out to 0x017F
+		wm8994_write(codec, 0x0020, val);	// Left OPGA Volume, incall boost
+
+		// wm8994_write(codec, 0x0021, 0x017D);	// Right OPGA Volume
+		val = wm8994_read(codec, 0x0021);	// 0x0020 is WM8994_LEFT_OPGA_VOLUME
+		val &= ~(0x0040 | 0x003F);		// WM8994_MIXOUTR_MUTE_N_MASK | WM8994_MIXOUTR_VOL_MASK 
+		val |= (0x0100 | 0x0040 | 0x3F);	// these work out to 0x017F
+		wm8994_write(codec, 0x0021, val);	// Left OPGA Volume, incall boost
+
+		// wm8994_write(codec, 0x0610, 0x01C0);	// DAC1 Left Volume
+		wm8994_write(codec, 0x0610, 0x01FF);	// DAC1 Left Volume, incall boost
+		// wm8994_write(codec, 0x0611, 0x01C0);	// DAC1 Right Volume
+		wm8994_write(codec, 0x0611, 0x01FF);	// DAC1 Right Volume, incall boost
 #if 1
 		wm8994_write(codec, 0x001F, 0x0000);	// HPOUT2 Volume
 #else
@@ -2327,6 +2353,8 @@ void wm8994_set_voicecall_bluetooth(struct snd_soc_codec *codec)
 
 	/* Output Path Volume */
 	wm8994_write(codec, 0x0402, 0x01C0);	// AIF1 DAC1 Left Volume(Playback)
+
+	wm8994_write(codec, 0x0603, 0x01EF);	// 0x0603 is WM8994_DAC2_MIXER_VOLUMES
 
 #if 1
 	wm8994_write(codec, 0x0612, 0x01C0);	// DAC2 Left Volume

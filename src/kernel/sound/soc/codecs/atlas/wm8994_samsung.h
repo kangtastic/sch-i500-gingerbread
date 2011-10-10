@@ -116,8 +116,8 @@ Codec Output Path BIT
 #define FMRADIO_SPK_HP		(0x01 << 3)
 
 #define PLAYBACK_GAIN_NUM	48
-#define VOICECALL_GAIN_NUM 32
-#define RECORDING_GAIN_NUM	31
+#define VOICECALL_GAIN_NUM	38
+#define RECORDING_GAIN_NUM	32
 #define FMRADIO_GAIN_NUM	34
 
 #define DCS_NUM 5
