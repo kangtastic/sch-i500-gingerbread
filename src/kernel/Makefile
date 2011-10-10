@@ -358,7 +358,10 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp \
 		   -fno-gcse -marm \
 		   -mthumb -fomit-frame-pointer \
-		   -funroll-loops -ffast-math -fsingle-precision-constant
+		   -funroll-loops -ffast-math -fsingle-precision-constant \
+		   --param l2-cache-size=256 --param l1-cache-size=16 \
+		   --param simultaneous-prefetches=8 --param prefetch-latency=200 \
+		   --param l1-cache-line-size=32
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
