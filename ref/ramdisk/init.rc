@@ -129,7 +129,6 @@ on fs
     # mount yaffs2 mtd@cache /cache nosuid nodev
     mount rfs /dev/block/stl9 /system check=no
     mount rfs /dev/block/stl9 /system ro remount
-    mount ext4 /dev/block/stl9 /system wait noatime nosuid nodev
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
     #chown system system /efs
@@ -149,7 +148,6 @@ on fs
 # SEC_DMCRYPT crypt flag added data
     # mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
     mount rfs /dev/block/mmcblk0p1 /data nosuid nodev crypt check=no
-    mount ext4 /dev/block/mmcblk0p1 /data wait noatime nosuid nodev
     chown system system /data
     chmod 0771 /data    
 
@@ -157,7 +155,6 @@ on fs
   #SEC_DMCRYPT crypt flag added
     mount rfs /dev/block/stl10 /dbdata nosuid nodev crypt check=no
     #mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
-    mount ext4 /dev/block/stl10 /dbdata wait noatime nosuid nodev
     chown system system /dbdata
     chmod 0771 /dbdata
     chmod 0771 /dbdata
@@ -171,7 +168,6 @@ on fs
     chown system system /dbdata/db-journal
     chmod 0777 /dbdata/db-journal
     mount rfs /dev/block/stl11 /cache nosuid nodev check=no
-    mount ext4 /dev/block/stl11 /cache wait noatime nosuid nodev
 
     mkdir /mnt/.lfs 0755 root root
     mount j4fs /dev/block/stl6 /mnt/.lfs
@@ -575,6 +571,9 @@ on boot
     write /proc/sys/vm/dirty_ratio  65
     write /proc/sys/vm/vfs_cache_pressure  40
 
+    # tweak sdcard readahead cache
+    write /sys/block/mmcblk1/bdi/read_ahead_kb 1024
+
     # Permissions for System Server and daemons.
     chown radio system /sys/android_power/state
     chown radio system /sys/android_power/request_state
@@ -670,7 +669,6 @@ on boot
 
 ## Daemon processes to be run by init.
 ##
-
 service ueventd /sbin/ueventd
     critical
 
@@ -786,6 +784,13 @@ service media /system/bin/mediaserver
     user media
     group system audio camera graphics inet net_bt net_bt_admin net_raw
     ioprio rt 4
+
+
+service samsungani /system/bin/samsungani
+    user graphics
+    group graphics
+    disabled
+    oneshot
 
 service wpa_supplicant /system/bin/wpa_supplicant -Dwext -ieth0 -c/data/wifi/bcm_supp.conf
 	disabled
@@ -904,11 +909,6 @@ service geomagneticd /system/bin/geomagneticd
 service gps-daemon /system/vendor/bin/gpsd
 	user system
 	group system inet
-
-# TKSGB tweaks
-service tksgb-tweaks /sbin/tksgb-tweaks.sh
-	user root
-	oneshot
 
 # enable init.d support
 service run_parts /system/xbin/run-parts /system/etc/init.d
