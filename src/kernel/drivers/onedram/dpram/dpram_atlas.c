@@ -2667,7 +2667,7 @@ static int dpram_resume(struct platform_device *dev)
 	return 0;
 }
 
-static int dpram_shutdown(struct platform_Device *dev)
+static int dpram_shutdown(struct platform_device *dev)
 {
 	int ret = 0;
 	printk("\ndpram_shutdown !!!!!!!!!!!!!!!!!!!!!\n");
