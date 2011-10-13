@@ -18,7 +18,7 @@ cp -r $REFDIR/update-zip $OUTDIR/update-zip
 cp $KERNELBINDIR/zImage $OUTDIR/update-zip/kernel_update/
 # Put $DATE value into updater-script
 pushd $OUTDIR/update-zip/META-INF/com/google/android > /dev/null
-sed _\$DATE_$DATE <updater-script >updater-script.tmp
+sed s_"\$DATE"_"$DATE"_ <updater-script >updater-script.tmp
 mv -f updater-script.tmp updater-script
 popd > /dev/null
 pushd $OUTDIR/update-zip
