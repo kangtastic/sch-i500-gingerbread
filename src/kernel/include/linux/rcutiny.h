@@ -35,7 +35,7 @@ void rcu_bh_qs(int cpu);
 #define __rcu_read_unlock()	preempt_enable()
 #else /* #ifdef CONFIG_TINY_RCU */
 void __rcu_read_lock(void);
-void __rcu_read_unlock (void)
+void __rcu_read_unlock(void);
 #endif /* #else #ifdef CONFIG_TINY_RCU */
 #define __rcu_read_lock_bh()	local_bh_disable()
 #define __rcu_read_unlock_bh()	local_bh_enable()
@@ -115,7 +115,6 @@ static inline void exit_rcu(void)
 static inline int rcu_needs_cpu(int cpu)
 {
 	return 0;
-
 }
 
 static inline int rcu_preempt_depth(void)

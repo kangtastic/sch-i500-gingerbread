@@ -85,7 +85,7 @@ extern struct group_info init_groups;
 #define INIT_TASK_RCU_TREE_PREEMPT()					\
 	.rcu_blocked_node = NULL,
 #else
-#define INIT_TASK_RCU_PREEMPT(tsk)
+#define INIT_TASK_RCU_TREE_PREEMPT(tsk)
 #endif
 #ifdef CONFIG_PREEMPT_RCU
 #define INIT_TASK_RCU_PREEMPT(tsk)					\
