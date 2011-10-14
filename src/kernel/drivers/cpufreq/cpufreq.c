@@ -32,7 +32,7 @@
 #define dprintk(msg...) cpufreq_debug_printk(CPUFREQ_DEBUG_CORE, \
 						"cpufreq-core", msg)
 
-int exp_UV_mV[12];
+int exp_UV_mV[12] = { 0 };
 extern unsigned int freq_uv_table[12][3];
 int enabled_freqs[12] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
