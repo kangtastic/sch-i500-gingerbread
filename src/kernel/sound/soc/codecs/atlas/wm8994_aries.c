@@ -52,10 +52,10 @@ WM8994_AIF2DAC_BOOST_SHIFT is decimal 10 (see wm8994_def.h).
 	2 (+12dB = loud)	result is 0x0800
 	3 (+18dB = loudest)	result is 0x0C00
 */
-static const unsigned short incall_boost_rcv  = (3 << WM8994_AIF2DAC_BOOST_SHIFT);
-static const unsigned short incall_boost_bt   = (1 << WM8994_AIF2DAC_BOOST_SHIFT);
-static const unsigned short incall_boost_spk  = (1 << WM8994_AIF2DAC_BOOST_SHIFT);
-static const unsigned short incall_boost_hp   = (1 << WM8994_AIF2DAC_BOOST_SHIFT);
+static const unsigned short incall_boost_rcv  = (2 << WM8994_AIF2DAC_BOOST_SHIFT);
+static const unsigned short incall_boost_bt   = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
+static const unsigned short incall_boost_spk  = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
+static const unsigned short incall_boost_hp   = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
 
 /*
 	In-call Microphone Gain Information
