@@ -1244,8 +1244,6 @@ static unsigned long shrink_inactive_list(unsigned long max_scan,
 
 			/* Check if we should syncronously wait for writeback */
 		if (should_reclaim_stall(nr_taken, nr_reclaimed, priority, sc)) {
-			congestion_wait(BLK_RW_ASYNC, HZ/10);
-
 			/*
 			 * The attempt at page out may have made some
 			 * of the pages active, mark them inactive again.
