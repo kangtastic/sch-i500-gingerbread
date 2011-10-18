@@ -189,7 +189,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/i386/ -e s/sun4u/sparc64/ \
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 export KBUILD_BUILDHOST := $(SUBARCH)
 ARCH		?= arm
-CROSS_COMPILE	?= /home/vb/toolchain/android-toolchain-eabi/bin/arm-eabi-
+CROSS_COMPILE	?= /home/vb/toolchain/arm-2010q1/bin/arm-none-linux-gnueabi-
 
 
 # Architecture as present in compile.h
@@ -353,9 +353,13 @@ KBUILD_CFLAGS   := -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
 		   -Wno-format-security \
-		   -fno-delete-null-pointer-checks
-		   -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=softfp \
-		   -floop-interchange -floop-strip-mine -floop-block
+		   -fno-delete-null-pointer-checks \
+		   -march=armv7-a -mtune=cortex-a8 -mcpu=cortex-a8 \
+		   -mfpu=neon -mfloat-abi=softfp -marm -mthumb \
+		   -fno-gcse -funroll-loops -ffast-math -fsingle-precision-constant \
+		   --param l2-cache-size=256 --param l1-cache-size=16 \
+		   --param simultaneous-prefetches=8 --param prefetch-latency=200 \
+		   --param l1-cache-line-size=32
 KBUILD_AFLAGS   := -D__ASSEMBLY__
 
 # Read KERNELRELEASE from include/config/kernel.release (if it exists)
