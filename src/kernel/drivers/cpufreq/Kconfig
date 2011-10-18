@@ -219,14 +219,6 @@ config CPU_FREQ_GOV_ONDEMANDX
 	  To compile this driver as a module, choose M here: the
 	  module will be called cpufreq_ondemand.
 	  For details, take a look at linux/Documentation/cpu-freq.
- 
-config CPU_FREQ_GOV_ONDEMANDX_INPUT
-	bool "Ramp up CPU frequency on input events"
-	default y
-	depends on CPU_FREQ_GOV_ONDEMANDX
-	help
-	  Enable installation of an input event handler which will ramp up the
-	  CPU to max frequency when an input event is received.
 
 config CPU_FREQ_GOV_CONSERVATIVE
 	tristate "'conservative' cpufreq governor"
