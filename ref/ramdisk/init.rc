@@ -564,7 +564,7 @@ on boot
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 2048,3072,4096,6144,10240,12288
+    write /sys/module/lowmemorykiller/parameters/minfree 1024,2048,4096,6144,10240,12288
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
@@ -902,8 +902,13 @@ service geomagneticd /system/bin/geomagneticd
     group system input
     
 service gps-daemon /system/vendor/bin/gpsd
-	user system
-	group system inet
+    user system
+    group system inet
+
+# TKSGB tweaks. Fold things like sdcard readahead into here
+service tksgb-tweaks /sbin/tksgb-tweaks.sh
+    user root
+    oneshot
 
 # TKSGB tweaks
 service tksgb-tweaks /sbin/tksgb-tweaks.sh
@@ -912,5 +917,5 @@ service tksgb-tweaks /sbin/tksgb-tweaks.sh
 
 # enable init.d support
 service run_parts /system/xbin/run-parts /system/etc/init.d
-        oneshot
+    oneshot
 
