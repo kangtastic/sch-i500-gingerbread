@@ -827,10 +827,6 @@ readd_boot_animation()
 			disabled
 			oneshot' >> init.rc
 	fi
-	if test -f /system/media/bootsound.mp3; then
-		madplay -Q -t 15 -A 15 -o wave:- /system/media/bootsound.mp3 > /system/etc/PowerOn.wav
-		rm /system/media/bootsound.mp3
-	fi
 }
 
 
