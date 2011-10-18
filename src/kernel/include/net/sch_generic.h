@@ -176,6 +176,7 @@ struct tcf_proto {
 
 struct qdisc_skb_cb {
 	unsigned int		pkt_len;
+	unsigned int		sfb_classid;
 	char			data[];
 };
 

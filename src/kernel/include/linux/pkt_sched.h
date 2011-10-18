@@ -481,4 +481,42 @@ struct tc_drr_stats {
 	__u32	deficit;
 };
 
+/* SFB */
+
+enum {
+	TCA_SFB_UNSPEC,
+	TCA_SFB_PARMS,
+	__TCA_SFB_MAX,
+};
+
+#define TCA_SFB_MAX (__TCA_SFB_MAX - 1)
+
+/*
+ * Note: increment, decrement are Q0.16 fixed-point values.
+ */
+struct tc_sfb_qopt {
+	__u32 rehash_interval;	/* delay between hash flip, in seconds */
+	__u32 db_interval;	/* double buffering interval in seconds (db_interval < rehash_interval) */
+	__u32 max;		/* max len of qlen_min */
+	__u32 target;		/* bin_size */
+	__u32 increment;	/* delta, (d1 in Blue) */
+	__u32 decrement;	/* delta, (d2 in Blue) */
+	__u32 limit;		/* max SFB queue length */
+	__u32 penalty_rate;
+	__u32 penalty_burst;
+};
+
+struct tc_sfb_xstats {
+	__u32 earlydrop;
+	__u32 penaltydrop;
+	__u32 bucketdrop;
+	__u32 queuedrop;
+	__u32 childdrop; /* drops in child qdisc */
+	__u32 marked;
+	__u32 maxqlen;
+	__u32 maxprob;
+};
+
+#define SFB_MAX_PROB 0xFFFF
+
 #endif
