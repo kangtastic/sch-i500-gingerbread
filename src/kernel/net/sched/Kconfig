@@ -134,9 +134,6 @@ config NET_SCH_SFB
 
          See the top of <file:net/sched/sch_sfb.c> for more details.
 
-	 To compile this code as a module, choose M here: the
-	 module will be called sch_sfb.
-
 config NET_SCH_SFQ
 	tristate "Stochastic Fairness Queueing (SFQ)"
 	---help---
