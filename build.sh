@@ -7,8 +7,8 @@ export TIME=$(date +%H%M)
 # TOOLCHAIN / TOOLCHAIN_PREFIX
 #
 # External ARM Toolchain
-export TOOLCHAIN=/home/vb/toolchain/arm-2009q3/bin
-export TOOLCHAIN_PREFIX=arm-none-linux-gnueabi-
+export TOOLCHAIN=/home/vb/toolchain/android-toolchain-eabi/bin
+export TOOLCHAIN_PREFIX=arm-eabi-
 
 # ROOTDIR
 #
