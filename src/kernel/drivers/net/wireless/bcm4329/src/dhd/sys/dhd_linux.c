@@ -2602,6 +2602,9 @@ dhd_module_init(void)
 		printf("\n%s\n", dhd_version);
 	else {
 		DHD_ERROR(("%s: sdio_register_driver failed\n", __FUNCTION__));
+#if defined(CUSTOMER_HW_SAMSUNG) && defined(CONFIG_WIFI_CONTROL_FUNC)
+		wifi_del_dev();
+#endif
 		goto faild;
 	}
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
@@ -2614,6 +2617,9 @@ dhd_module_init(void)
 		error = -EINVAL;
 		DHD_ERROR(("%s: sdio_register_driver timeout\n", __FUNCTION__));
 		dhd_bus_unregister();
+#if defined(CUSTOMER_HW_SAMSUNG) && defined(CONFIG_WIFI_CONTROL_FUNC)
+		wifi_del_dev();
+#endif
 	}
 #endif
 	return error;
