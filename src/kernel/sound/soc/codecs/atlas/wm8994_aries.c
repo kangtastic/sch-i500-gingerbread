@@ -73,9 +73,9 @@ Each step corresponds to +1.5dB of gain.
 	0x1C:  25.5dB	0x1D:  27dB	0x1E:  28.5dB	0x1F:  30dB
 */
 static const unsigned short incall_mic_gain_rcv       = 0x17;	// +18dB
-static const unsigned short incall_mic_gain_spk       = 0x1F;	// +30dB
+static const unsigned short incall_mic_gain_spk       = 0x13;	// +12dB
 static const unsigned short incall_mic_gain_hp        = 0x16;	// +16.5dB
-static const unsigned short incall_mic_gain_hp_no_mic = 0x1C;	// +25.5dB
+static const unsigned short incall_mic_gain_hp_no_mic = 0x19;	// +21dB
 
 struct gain_info_t playback_gain_table[PLAYBACK_GAIN_NUM] = {
 	{ /* COMMON */
@@ -371,8 +371,7 @@ struct gain_info_t voicecall_gain_table[VOICECALL_GAIN_NUM] = {
 		.mode = VOICECALL_SPK,
 		.reg  = WM8994_LEFT_LINE_INPUT_1_2_VOLUME,	/* 18h */
 		.mask = WM8994_IN1L_VOL_MASK,
-		// .gain = WM8994_IN1L_VU | 0x12   /* Mic +30dB */
-		.gain = WM8994_IN1L_VU | 0x1F   /* Mic +30dB */
+		.gain = WM8994_IN1L_VU | 0x12   /* Mic +30dB */
 	}, {
 		.mode = VOICECALL_SPK,
 		.reg  = WM8994_SPKMIXL_ATTENUATION,	/* 22h */
@@ -2298,7 +2297,8 @@ void wm8994_set_voicecall_speaker(struct snd_soc_codec *codec)
 	wm8994_write(codec, 0x0420, 0x0080);	// AIF2 DAC Filter1(Playback)
 
 	/* Input Path Volume */
-	wm8994_write(codec, 0x0019, 0x0112);	// Left Line Input 3&4 Volume. SPK Mic using the IN2NL | DM1CDAT1
+	// wm8994_write(codec, 0x0019, 0x0112);	// Left Line Input 3&4 Volume. SPK Mic using the IN2NL | DM1CDAT1
+	wm8994_write(codec, 0x0019, incall_mic_gain_spk);	// incall boost
 	wm8994_write(codec, 0x0603, 0x000C);	// DAC2 Mixer Volumes
 	wm8994_write(codec, 0x0612, 0x01C0);	// DAC2 Left Volume
 	wm8994_write(codec, 0x0613, 0x01C0);	// DAC2 Right Volume
