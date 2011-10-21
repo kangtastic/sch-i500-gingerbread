@@ -129,7 +129,6 @@ on fs
     # mount yaffs2 mtd@cache /cache nosuid nodev
     mount rfs /dev/block/stl9 /system check=no
     mount rfs /dev/block/stl9 /system ro remount
-    mount ext4 /dev/block/stl9 /system wait noatime nosuid nodev
 
 # SEC_DMCRYPT for MC_CRYPT_ROOT before apply_disk_policy or apply_sec_devenc_init
     #chown system system /efs
@@ -149,7 +148,6 @@ on fs
 # SEC_DMCRYPT crypt flag added data
     # mount rfs /dev/block/mmcblk0p2 /data nosuid nodev check=no
     mount rfs /dev/block/mmcblk0p1 /data nosuid nodev crypt check=no
-    mount ext4 /dev/block/mmcblk0p1 /data wait noatime nosuid nodev
     chown system system /data
     chmod 0771 /data    
 
@@ -157,7 +155,6 @@ on fs
   #SEC_DMCRYPT crypt flag added
     mount rfs /dev/block/stl10 /dbdata nosuid nodev crypt check=no
     #mount rfs /dev/block/stl10 /dbdata nosuid nodev check=no
-    mount ext4 /dev/block/stl10 /dbdata wait noatime nosuid nodev
     chown system system /dbdata
     chmod 0771 /dbdata
     chmod 0771 /dbdata
@@ -171,7 +168,6 @@ on fs
     chown system system /dbdata/db-journal
     chmod 0777 /dbdata/db-journal
     mount rfs /dev/block/stl11 /cache nosuid nodev check=no
-    mount ext4 /dev/block/stl11 /cache wait noatime nosuid nodev
 
     mkdir /mnt/.lfs 0755 root root
     mount j4fs /dev/block/stl6 /mnt/.lfs
@@ -549,10 +545,10 @@ on boot
         setprop ro.SECONDARY_SERVER_MEM 6144
         setprop ro.BACKUP_APP_MEM 6144
         setprop ro.HOME_APP_MEM 6144
-        setprop ro.HIDDEN_APP_MEM 10240
-        setprop ro.CONTENT_PROVIDER_MEM 10240
+        setprop ro.HIDDEN_APP_MEM 9216
+        setprop ro.CONTENT_PROVIDER_MEM 9216
         setprop ro.EMPTY_APP_MEM 12288
-    
+
     
     setprop ro.bt.bdaddr_path "/data/misc/bluetooth/bt_addr"
 
@@ -564,7 +560,7 @@ on boot
 
     write /proc/sys/vm/overcommit_memory 1
     write /proc/sys/vm/min_free_order_shift 4
-    write /sys/module/lowmemorykiller/parameters/minfree 1024,2048,4096,6144,10240,12288
+    write /sys/module/lowmemorykiller/parameters/minfree 1024,2048,4096,6144,9216,12288
 
     # Set init its forked children's oom_adj.
     write /proc/1/oom_adj -16
@@ -909,11 +905,6 @@ service gps-daemon /system/vendor/bin/gpsd
 service tksgb-tweaks /sbin/tksgb-tweaks.sh
     user root
     oneshot
-
-# TKSGB tweaks
-service tksgb-tweaks /sbin/tksgb-tweaks.sh
-	user root
-	oneshot
 
 # enable init.d support
 service run_parts /system/xbin/run-parts /system/etc/init.d
