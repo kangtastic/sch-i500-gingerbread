@@ -1663,7 +1663,7 @@ void wm8994_set_voicecall_common_setting(struct snd_soc_codec *codec)
 		WM8994_AIF2ADCR_SRC | WM8994_AIF2_BCLK_INV | 0x18);
 
 	wm8994_write(codec, WM8994_AIF2_BCLK, 0x70);
-	wm8994_write(codec, WM8994_AIF2_CONTROL_2, 0x0000);
+	// wm8994_write(codec, WM8994_AIF2_CONTROL_2, 0x0000); /// set this later for in-call boost
 	wm8994_write(codec, WM8994_AIF2_MASTER_SLAVE, WM8994_AIF2_MSTR |
 		WM8994_AIF2_CLK_FRC | WM8994_AIF2_LRCLK_FRC);
 
@@ -1731,7 +1731,7 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	wm8994_write(codec, 0x0302, 0x4000);	// AIF1 Master Slave Setting. To prevent that the music is played slowly.
 	wm8994_write(codec, 0x0312, 0x0000);	// AIF2 Master Slave Setting
 	wm8994_write(codec, 0x0310, 0x4118);	// AIF2 Control 1
-	wm8994_write(codec, 0x0311, 0x0000);	// AIF2 Control 2
+	wm8994_write(codec, 0x0311, 0x0800);	// AIF2 Control 2, hard incall boost +12dB
 	wm8994_write(codec, 0x0520, 0x0080);	// AIF2 DAC Filter 1
 	wm8994_write(codec, 0x0204, 0x0019);	// AIF2 Clocking 1. AIF2 Clock Enable
 
@@ -1757,11 +1757,14 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	/* Input Path Volume */
 	if(loopback_mode == LOOPBACK_MODE_OFF)
 	{
+#if 0
              #ifdef CONFIG_MACH_ATLAS_USCC
 		wm8994_write(codec, 0x0018, 0x0110); //- 9dB for metrico test	// Left Line Input 1&2 Volume
 		#else
 		wm8994_write(codec, 0x0018, 0x0116);	// Left Line Input 1&2 Volume
 		#endif
+#endif
+		wm8994_write(codec, 0x0018, 0x0116);	// Left Line Input 1&2 Volume
 		wm8994_write(codec, 0x0500, 0x01C0);	// AIF2 ADC Left Volume
 		wm8994_write(codec, 0x0612, 0x01C0);	// DAC2 Left Volume
 		wm8994_write(codec, 0x0603, 0x000C);	// DAC2 Mixer Volumes
@@ -1782,8 +1785,20 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	{
 		wm8994_write(codec, 0x0031, 0x0000);	// Output Mixer 5
 		wm8994_write(codec, 0x0032, 0x0000);	// Output Mixer 6
+#if 0
 		wm8994_write(codec, 0x0020, 0x017D);	// Left OPGA Volume
 		wm8994_write(codec, 0x0021, 0x017D);	// Right OPGA Volume
+#endif
+		// Let ROM set OPGA volumes
+		val = wm8994_read(codec, WM8994_LEFT_OPGA_VOLUME);
+		val &= ~(WM8994_MIXOUTL_MUTE_N_MASK);
+		val |= (WM8994_MIXOUTL_MUTE_N);
+		wm8994_write(codec, WM8994_LEFT_OPGA_VOLUME, val);
+		val = wm8994_read(codec, WM8994_RIGHT_OPGA_VOLUME);
+		val &= ~(WM8994_MIXOUTR_MUTE_N_MASK);
+		val |= (WM8994_MIXOUTR_MUTE_N);
+		wm8994_write(codec, WM8994_RIGHT_OPGA_VOLUME, val);
+
 		wm8994_write(codec, 0x0610, 0x01C0);	// DAC1 Left Volume
 		wm8994_write(codec, 0x0611, 0x01C0);	// DAC1 Right Volume
 #if 1
