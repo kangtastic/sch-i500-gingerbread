@@ -54,7 +54,7 @@ extern void FSA9480_Enable_SPK(u8 enable);
  *	3 (+18dB = loudest)	result is 0x0C00
  */
 
-unsigned short incall_boost_rcv  = (2 << WM8994_AIF2DAC_BOOST_SHIFT);
+unsigned short incall_boost_rcv  = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
 unsigned short incall_boost_bt   = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
 unsigned short incall_boost_spk  = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
 unsigned short incall_boost_hp   = (0 << WM8994_AIF2DAC_BOOST_SHIFT);
@@ -1810,7 +1810,7 @@ void wm8994_set_voicecall_receiver(struct snd_soc_codec *codec)
 	wm8994_write(codec, 0x0302, 0x4000);	// AIF1 Master Slave Setting. To prevent that the music is played slowly.
 	wm8994_write(codec, 0x0312, 0x0000);	// AIF2 Master Slave Setting
 	wm8994_write(codec, 0x0310, 0x4118);	// AIF2 Control 1
-	wm8994_write(codec, 0x0311, incall_boost_rcv);	// AIF2 Control 2, user adjustable incall boost +12dB by default
+	wm8994_write(codec, 0x0311, incall_boost_rcv);	// AIF2 Control 2, user adjustable incall boost
 	wm8994_write(codec, 0x0520, 0x0080);	// AIF2 DAC Filter 1
 	wm8994_write(codec, 0x0204, 0x0019);	// AIF2 Clocking 1. AIF2 Clock Enable
 
